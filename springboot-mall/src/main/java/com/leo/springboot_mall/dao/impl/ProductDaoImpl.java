@@ -1,7 +1,6 @@
 package com.leo.springboot_mall.dao.impl;
 
 import org.springframework.stereotype.Component;
-import org.hibernate.validator.internal.engine.valueextraction.ValueExtractorDescriptor.Key;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -67,5 +66,23 @@ public class ProductDaoImpl implements ProductDao{
         int productId = keyholder.getKey().intValue();
 
         return productId;
+    }
+
+    @Override
+    public void updateProduct(Integer productId, ProductRequest productRequest) {
+        String sql = "UPDATE product SET product_name = :product_name, category = :category, image_url = :image_url, price = :price, stock = :stock, description = :description, last_modified_date = :last_modified_date WHERE product_id = :product_id";
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("product_id", productId);
+
+        map.put("product_name", productRequest.getProductName());
+        map.put("category", productRequest.getCategory().toString());
+        map.put("image_url", productRequest.getImageUrl());
+        map.put("price", productRequest.getPrice());
+        map.put("stock", productRequest.getStock());
+        map.put("description", productRequest.getDescription());
+        map.put("last_modified_date", new Date());
+
+        namedParameterJdbcTemplate.update(sql, map);
     }
 }
