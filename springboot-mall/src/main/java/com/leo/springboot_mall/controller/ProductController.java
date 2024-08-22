@@ -10,7 +10,9 @@ import com.leo.springboot_mall.model.Product;
 import com.leo.springboot_mall.service.ProductService;
 
 import jakarta.validation.Valid;
+import java.util.List;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +26,14 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+
+    // 商品功能 - 取得所有商品資料
+    @GetMapping("/products")
+    public ResponseEntity<List<Product>> getProducts() {
+        List<Product> productList = productService.getProducts();
+
+        return ResponseEntity.status(HttpStatus.OK).body(productList);
+    }
 
     // 商品功能 - 取得商品資料
     @GetMapping("/products/{productId}")
@@ -71,4 +81,11 @@ public class ProductController {
 
     }
     
+    // 商品功能 - 刪除商品
+    @DeleteMapping("/products/{productId}")
+    public ResponseEntity<?> deleteProduct(@PathVariable Integer productId) {
+        productService.deleteProductById(productId);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }
