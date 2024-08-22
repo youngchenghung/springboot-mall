@@ -3,6 +3,7 @@ package com.leo.springboot_mall.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.leo.springboot_mall.constant.ProductCategory;
 import com.leo.springboot_mall.dao.ProductDao;
 import com.leo.springboot_mall.dto.ProductRequest;
 import com.leo.springboot_mall.model.Product;
@@ -16,8 +17,8 @@ public class ProductServiceImpl implements ProductService{
     @Autowired
     private ProductDao productDao;
 
-    public List<Product> getProducts() {
-        return productDao.getProducts();
+    public List<Product> getProducts(ProductCategory category, String search) {
+        return productDao.getProducts(category, search);
     }
 
     @Override

@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.leo.springboot_mall.constant.ProductCategory;
 import com.leo.springboot_mall.dto.ProductRequest;
 import com.leo.springboot_mall.model.Product;
 import com.leo.springboot_mall.service.ProductService;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -28,9 +30,13 @@ public class ProductController {
     private ProductService productService;
 
     // 商品功能 - 取得所有商品資料
+    // 可以透過category和search進行篩選查詢
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> getProducts() {
-        List<Product> productList = productService.getProducts();
+    public ResponseEntity<List<Product>> getProducts(
+        @RequestParam(required = false) ProductCategory category,
+        @RequestParam(required = false) String search) {
+
+        List<Product> productList = productService.getProducts(category, search);
 
         return ResponseEntity.status(HttpStatus.OK).body(productList);
     }
