@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.leo.springboot_mall.constant.ProductCategory;
+import com.leo.springboot_mall.dto.ProductQueryParams;
 import com.leo.springboot_mall.dto.ProductRequest;
 import com.leo.springboot_mall.model.Product;
 import com.leo.springboot_mall.service.ProductService;
@@ -30,13 +31,25 @@ public class ProductController {
     private ProductService productService;
 
     // 商品功能 - 取得所有商品資料
-    // 可以透過category和search進行篩選查詢
+    // 可以透過category和search進行篩選查詢             
     @GetMapping("/products")
     public ResponseEntity<List<Product>> getProducts(
+        // 查詢參數filtering
         @RequestParam(required = false) ProductCategory category,
-        @RequestParam(required = false) String search) {
+        @RequestParam(required = false) String search,
 
-        List<Product> productList = productService.getProducts(category, search);
+        // 排序參數sorting, 預設為created_date 資料的大到小排序
+        @RequestParam(defaultValue = "created_date") String orderBy,
+        @RequestParam(defaultValue = "desc") String sort
+        ) {
+
+        ProductQueryParams productQueryParams = new ProductQueryParams();
+        productQueryParams.setCategory(category);
+        productQueryParams.setSearch(search);
+        productQueryParams.setOrderBy(orderBy);
+        productQueryParams.setSort(sort);
+
+        List<Product> productList = productService.getProducts(productQueryParams);
 
         return ResponseEntity.status(HttpStatus.OK).body(productList);
     }
