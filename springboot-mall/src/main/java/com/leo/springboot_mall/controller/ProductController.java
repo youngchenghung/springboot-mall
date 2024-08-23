@@ -11,6 +11,7 @@ import com.leo.springboot_mall.dto.ProductQueryParams;
 import com.leo.springboot_mall.dto.ProductRequest;
 import com.leo.springboot_mall.model.Product;
 import com.leo.springboot_mall.service.ProductService;
+import com.leo.springboot_mall.util.Page;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
@@ -37,7 +38,7 @@ public class ProductController {
     // 商品功能 - 取得所有商品資料
     // 可以透過category和search進行篩選查詢             
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> getProducts(
+    public ResponseEntity<Page<Product>> getProducts(
         // 查詢參數filtering
         @RequestParam(required = false) ProductCategory category,
         @RequestParam(required = false) String search,
@@ -61,7 +62,15 @@ public class ProductController {
 
         List<Product> productList = productService.getProducts(productQueryParams);
 
-        return ResponseEntity.status(HttpStatus.OK).body(productList);
+        Integer total = productService.countProduct(productQueryParams);
+
+        Page<Product> page = new Page<>();
+        page.setLimit(limit);
+        page.setOffset(offset);
+        page.setTotal(total);
+        page.setResult(productList);
+
+        return ResponseEntity.status(HttpStatus.OK).body(page);
     }
 
     // 商品功能 - 取得商品資料
