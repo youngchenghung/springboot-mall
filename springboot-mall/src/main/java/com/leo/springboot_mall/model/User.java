@@ -2,11 +2,16 @@ package com.leo.springboot_mall.model;
 
 import java.sql.Timestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class User {
 
     private Integer userId;
     private String email;
+
+    @JsonIgnore
     private String password;
+    
     private Timestamp createdDate;
     private Timestamp lastModifiedDate;
 
