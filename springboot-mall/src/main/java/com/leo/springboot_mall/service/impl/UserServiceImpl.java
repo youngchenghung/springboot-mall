@@ -10,6 +10,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.leo.springboot_mall.service.UserService;
 
 import com.leo.springboot_mall.dao.UserDao;
+import com.leo.springboot_mall.dto.UserLoginRequest;
 import com.leo.springboot_mall.dto.UserRegisterRequest;
 import com.leo.springboot_mall.model.User;
 
@@ -41,5 +42,25 @@ public class UserServiceImpl implements UserService{
         return userDao.createUser(userRegisterRequest);
     }
 
+    @Override
+    public User login(UserLoginRequest userLoginRequest) {
+
+        User user = userDao.getUserByEmail(userLoginRequest.getEmail());
+
+        // 檢查Email是否存在
+        if (user == null) {
+            log.warn("Email {} 不存在", userLoginRequest.getEmail());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        // 檢查密碼是否正確
+        if (user.getPassword().equals(userLoginRequest.getPassword())) {
+            return user;
+        }
+        else {
+            log.warn("密碼錯誤");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+    }
 
 }
