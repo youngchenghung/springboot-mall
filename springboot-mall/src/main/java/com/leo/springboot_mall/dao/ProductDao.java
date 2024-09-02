@@ -1,6 +1,5 @@
 package com.leo.springboot_mall.dao;
 
-import com.leo.springboot_mall.constant.ProductCategory;
 import com.leo.springboot_mall.dto.ProductQueryParams;
 import com.leo.springboot_mall.dto.ProductRequest;
 import com.leo.springboot_mall.model.Product;
@@ -18,6 +17,8 @@ public interface ProductDao {
     Integer createProduct(ProductRequest productRequest);
 
     void updateProduct(Integer productId, ProductRequest productRequest);
+
+    void updateStock(Integer productId, Integer stock);
 
     void deleteProductById(Integer producId);
 }
